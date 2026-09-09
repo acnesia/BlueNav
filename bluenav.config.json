@@ -2,11 +2,12 @@
   "browserName": "BlueNav",
   "version": "1.0.0",
   "branding": {
-    "style": "brave-authentic",
-    "primaryColor": "#FB542B",
-    "backgroundColorDark": "#1E2029",
-    "surfaceColorDark": "#14151F",
-    "textColor": "#FFFFFF"
+    "style": "minimal-dark-pro",
+    "theme": "obsidian",
+    "primaryColor": "#FFFFFF",
+    "backgroundColorDark": "#09090B",
+    "surfaceColorDark": "#131316",
+    "textColor": "#F4F4F5"
   },
   "features": {
     "shields": {
@@ -16,14 +17,10 @@
       "blockTrackers": true,
       "blockFingerprinting": true
     },
-    "ai": {
-      "name": "BlueNav AI",
-      "enabled": true
-    },
     "newTabPage": {
-      "style": "brave-standard",
+      "style": "minimal",
       "showClock": true,
-      "showShieldStats": true,
+      "showSearchBar": true,
       "showTopSites": true
     }
   },

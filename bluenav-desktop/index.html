@@ -7,162 +7,120 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Top Navigation & Tabs Area -->
+  <!-- Header Chrome -->
   <header id="browser-chrome">
-    <!-- Tabs Bar -->
+    <!-- Tabs Strip -->
     <div id="tab-strip-container">
       <div id="tabs-list" class="tabs-list"></div>
-      <button id="btn-new-tab" class="chrome-btn" title="Nouvel onglet">+</button>
+      <button id="btn-new-tab" class="chrome-btn" title="Nouvel onglet">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
     </div>
 
-    <!-- Main Toolbar -->
+    <!-- Navigation Bar -->
     <div id="navbar">
       <div class="nav-controls">
         <button id="btn-back" class="nav-btn" title="Précédent" disabled>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <button id="btn-forward" class="nav-btn" title="Suivant" disabled>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
         <button id="btn-reload" class="nav-btn" title="Actualiser">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-        </button>
-        <button id="btn-home" class="nav-btn" title="Accueil BlueNav">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
         </button>
       </div>
 
-      <!-- Brave-style Omnibox -->
+      <!-- Omnibox -->
       <div id="omnibox-wrapper">
         <div id="omnibox-security-icon" class="omnibox-icon">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
-        <input type="text" id="omnibox-input" placeholder="Rechercher ou saisir une adresse" spellcheck="false" autocomplete="off">
+        <input type="text" id="omnibox-input" placeholder="Rechercher ou entrer une URL" spellcheck="false" autocomplete="off">
       </div>
 
-      <!-- Right Action Tools -->
+      <!-- Actions -->
       <div class="nav-actions">
-        <!-- Shields Button -->
-        <button id="btn-shield" class="action-btn" title="Boucliers BlueNav">
-          <div class="shield-icon-wrapper">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4zm0 18c-3.75-1.07-6.85-4.83-7-9.5V7.3l7-3.11 7 3.11V10.5c-.15 4.67-3.25 8.43-7 9.5z"/></svg>
-            <span id="shield-badge-count" class="shield-badge">0</span>
-          </div>
-        </button>
-
-        <!-- Sidebar / AI Button -->
-        <button id="btn-toggle-ai" class="action-btn" title="BlueNav AI">
-          <div class="ai-spark-wrapper">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            <span>AI</span>
-          </div>
+        <!-- Minimal Shields -->
+        <button id="btn-shield" class="action-btn" title="Protection Shields">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span id="shield-badge-count" class="shield-badge">0</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Brave Shields Flyout Panel -->
+  <!-- Minimal Shields Panel -->
   <div id="shield-panel" class="dropdown-panel hidden">
     <div class="shield-panel-header">
-      <div class="shield-panel-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fb542b"><path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z"/></svg>
-        <h4>Boucliers BlueNav</h4>
-      </div>
+      <span class="shield-title">Protection BlueNav</span>
       <label class="switch">
         <input type="checkbox" id="toggle-shield-input" checked>
-        <span class="slider round"></span>
+        <span class="slider"></span>
       </label>
     </div>
-    <div class="shield-status-text">
-      Les boucliers sont <strong>ACTIVÉS</strong> pour ce site
+    <div class="shield-stat-row">
+      <span class="shield-label">Bloqués sur cette page</span>
+      <span id="stat-session-blocked" class="shield-value">0</span>
     </div>
-    <div class="stat-box">
-      <span class="stat-label">Éléments bloqués</span>
-      <span id="stat-session-blocked" class="stat-number">0</span>
-    </div>
-    <div class="shield-panel-features">
-      <div class="shield-feature-item">
-        <span>Traqueurs intersites et pubs</span>
-        <span>Bloqués</span>
+    <div class="shield-details">
+      <div class="shield-item">
+        <span>Traqueurs et publicités</span>
+        <span class="shield-badge-active">Bloqué</span>
       </div>
-      <div class="shield-feature-item">
-        <span>Connexions HTTPS</span>
-        <span>Mises à niveau</span>
-      </div>
-      <div class="shield-feature-item">
-        <span>Empreinte numérique</span>
-        <span>Protégée</span>
+      <div class="shield-item">
+        <span>Anti-fingerprinting</span>
+        <span class="shield-badge-active">Actif</span>
       </div>
     </div>
   </div>
 
-  <!-- Workspace: WebViews + New Tab Page + AI Sidebar -->
+  <!-- Main Viewport -->
   <main id="app-viewport">
-    <!-- Web Content Area -->
     <div id="web-workspace">
-      <!-- Authentic Brave New Tab View -->
+      <!-- Ultra-Clean Minimal New Tab -->
       <div id="new-tab-dashboard" class="ntp-view">
         <div class="ntp-container">
-          <!-- Top Stats (Trackers, Bandwidth, Time) -->
-          <div class="ntp-shield-banner">
-            <div class="shield-stat-card">
-              <span id="ntp-shield-total" class="stat-val">2 841</span>
-              <span class="stat-desc">Traqueurs et pubs bloqués</span>
-            </div>
-            <div class="shield-stat-card">
-              <span class="stat-val">68 Mo</span>
-              <span class="stat-desc">Bande passante économisée</span>
-            </div>
-            <div class="shield-stat-card">
-              <span class="stat-val">3 min</span>
-              <span class="stat-desc">Temps gagné</span>
-            </div>
-          </div>
+          <!-- Minimal Clock -->
+          <div id="ntp-clock" class="ntp-clock">12:00</div>
 
-          <!-- Central Clock & BlueNav Logo -->
-          <div class="ntp-clock-section">
-            <div id="ntp-clock" class="ntp-clock-time">12:00</div>
-            <div class="ntp-brand-badge">
-              <span>Navigateur <strong>BlueNav</strong></span>
-            </div>
-          </div>
-
-          <!-- Search Bar -->
+          <!-- Minimal Search -->
           <div class="ntp-search-box">
-            <div class="ntp-search-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </div>
-            <input type="text" id="ntp-search-input" placeholder="Effectuer une recherche sur le Web..." autocomplete="off">
-            <button id="btn-ntp-search" class="ntp-search-btn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </button>
+            <svg class="ntp-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="ntp-search-input" placeholder="Rechercher sur le Web ou saisir une adresse" autocomplete="off">
           </div>
 
-          <!-- Top Sites Tiles -->
+          <!-- Clean Monochrome Top Sites -->
           <div class="speed-dials">
-            <a class="speed-dial-item" href="#" data-url="https://github.com/acnesia/BlueNav">
-              <div class="dial-icon">🐙</div>
+            <a class="speed-dial-item" href="#" data-url="https://github.com">
+              <div class="dial-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              </div>
               <span class="dial-title">GitHub</span>
             </a>
             <a class="speed-dial-item" href="#" data-url="https://google.com">
-              <div class="dial-icon">🔍</div>
+              <div class="dial-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+              </div>
               <span class="dial-title">Google</span>
             </a>
             <a class="speed-dial-item" href="#" data-url="https://youtube.com">
-              <div class="dial-icon">▶️</div>
+              <div class="dial-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+              </div>
               <span class="dial-title">YouTube</span>
             </a>
-            <a class="speed-dial-item" href="#" data-url="https://reddit.com">
-              <div class="dial-icon">🤖</div>
-              <span class="dial-title">Reddit</span>
-            </a>
             <a class="speed-dial-item" href="#" data-url="https://wikipedia.org">
-              <div class="dial-icon">📚</div>
+              <div class="dial-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
               <span class="dial-title">Wikipédia</span>
             </a>
-            <a class="speed-dial-item" href="#" data-url="https://chatgpt.com">
-              <div class="dial-icon">🧠</div>
-              <span class="dial-title">ChatGPT</span>
+            <a class="speed-dial-item" href="#" data-url="https://news.ycombinator.com">
+              <div class="dial-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              </div>
+              <span class="dial-title">Hacker News</span>
             </a>
           </div>
         </div>
@@ -171,45 +129,6 @@
       <!-- WebViews Host -->
       <div id="webview-host"></div>
     </div>
-
-    <!-- BlueNav AI Sidebar (Brave Leo style) -->
-    <aside id="ai-sidebar" class="ai-sidebar closed">
-      <div class="ai-sidebar-header">
-        <div class="ai-header-title">
-          <h3>BlueNav AI</h3>
-        </div>
-        <div class="ai-header-controls">
-          <select id="ai-model-select">
-            <option value="BlueNav AI (Default)">Modèle par défaut</option>
-            <option value="Claude 3.5">Claude 3.5</option>
-            <option value="GPT-4o">GPT-4o</option>
-            <option value="Ollama Local">Ollama Local</option>
-          </select>
-          <button id="btn-close-ai" class="ai-icon-btn" title="Fermer">✕</button>
-        </div>
-      </div>
-
-      <div class="ai-quick-actions">
-        <button class="ai-chip" data-prompt="Résume cette page">Résumer</button>
-        <button class="ai-chip" data-prompt="Quels sont les points clés de ce site ?">Points clés</button>
-      </div>
-
-      <div id="ai-chat-container" class="ai-chat-messages">
-        <div class="ai-message assistant-message">
-          <div class="ai-bubble">
-            <strong>Assistant BlueNav</strong>
-            <p>Posez-moi des questions sur la page actuelle ou sur n'importe quel sujet.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="ai-input-wrapper">
-        <textarea id="ai-input-text" placeholder="Poser une question..." rows="2"></textarea>
-        <button id="btn-send-ai" class="ai-send-btn" title="Envoyer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
-      </div>
-    </aside>
   </main>
 
   <script src="renderer.js"></script>

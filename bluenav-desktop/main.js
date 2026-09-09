@@ -1,4 +1,4 @@
-﻿const { app, BrowserWindow, session, ipcMain, Menu } = require('electron');
+const { app, BrowserWindow, session, ipcMain, Menu } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -126,68 +126,6 @@ ipcMain.handle('shield:toggle', (event, state) => {
   }
   return shieldsEnabled;
 });
-
-ipcMain.handle('ai:query', async (event, { prompt, currentUrl, pageTitle, model }) => {
-  // Built-in intelligent AI assistant dispatcher
-  try {
-    // If user has Ollama running locally or custom keys
-    return await simulateOrCallAI(prompt, currentUrl, pageTitle, model);
-  } catch (err) {
-    return {
-      success: false,
-      response: "Erreur lors de la communication avec BlueAI: " + err.message
-    };
-  }
-});
-
-async function simulateOrCallAI(prompt, currentUrl, pageTitle, model = 'BlueAI Turbo') {
-  const lowerPrompt = prompt.toLowerCase();
-  
-  if (lowerPrompt.includes('résum') || lowerPrompt.includes('resume')) {
-    return {
-      success: true,
-      model,
-      response: `✨ **Analyse BlueAI pour la page :** *${pageTitle || currentUrl || 'Nouvel Onglet'}*\n\n` +
-        `• **Sujet principal :** Navigation sécurisée et synthèse instantanée par BlueNav.\n` +
-        `• **Confidentialité :** Aucun traqueur tiers ni cookie invasif n'a été détecté grâce à **BlueShields**.\n` +
-        `• **Points clés :** Page optimisée pour un affichage rapide avec isolation de l'empreinte numérique.`
-    };
-  }
-
-  if (lowerPrompt.includes('traqueur') || lowerPrompt.includes('shield') || lowerPrompt.includes('pub') || lowerPrompt.includes('sécurité')) {
-    return {
-      success: true,
-      model,
-      response: `🛡️ **Rapport BlueShields en temps réel :**\n\n` +
-        `• **Statut de protection :** ${shieldsEnabled ? '✅ ACTIVÉ' : '❌ DÉSACTIVÉ'}\n` +
-        `• **Requêtes bloquées cette session :** **${sessionBlocked}** requêtes publicitaires/télémétriques.\n` +
-        `• **En-têtes actifs :** Global Privacy Control (Sec-GPC) et Do Not Track (DNT) injectés automatiquement.`
-    };
-  }
-
-  if (lowerPrompt.includes('qui es-tu') || lowerPrompt.includes('bluenav')) {
-    return {
-      success: true,
-      model,
-      response: `🌐 **Je suis BlueAI**, votre assistant copilote intégré au navigateur **BlueNav**.\n\n` +
-        `Je suis conçu pour vous aider à :\n` +
-        `- Résumer n'importe quelle page web en 1 clic.\n` +
-        `- Répondre à vos questions et analyser le contenu web.\n` +
-        `- Protéger votre navigation avec **BlueShields**.\n` +
-        `- Se connecter à des modèles distants (Gemini, Claude, GPT) ou à vos modèles locaux via **Ollama** !`
-    };
-  }
-
-  // General response
-  return {
-    success: true,
-    model,
-    response: `🤖 **BlueAI (${model}) :**\n\n` +
-      `J'ai bien analysé votre demande : *" ${prompt} "*.\n\n` +
-      `Dans BlueNav, je peux interagir directement avec la page active (${currentUrl || 'Nouvel Onglet'}), extraire des données, traduire des articles ou vous guider sur le web sans jamais vendre vos données de navigation.`
-  };
-}
-
 app.whenReady().then(() => {
   setupBlueShields();
   createWindow();
