@@ -1,77 +1,87 @@
-name: 🚀 BlueNav Browser Build & Release
-
+name: BlueNav native Windows
 on:
   push:
-    branches: [ main ]
-    tags: [ 'v*' ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
-    inputs:
-      build_type:
-        description: 'Type de build'
-        required: true
-        default: 'desktop-installer'
-        type: choice
-        options:
-          - desktop-installer
-          - portable-exe
-          - all
-
 permissions:
-  contents: write
-
+  contents: read
+concurrency:
+  group: bluenav-native-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
-  build-windows:
-    name: 💻 Build BlueNav Windows Installer (.exe)
-    runs-on: windows-latest
+  validate:
+    runs-on: ubuntu-latest
     steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
         with:
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: bluenav-desktop/package-lock.json
-
-      - name: 📦 Install Dependencies
-        working-directory: bluenav-desktop
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate native customization
         run: |
-          npm ci || npm install
-
-      - name: 🛠️ Build BlueNav Windows Executable & Installer
-        working-directory: bluenav-desktop
-        run: |
-          npm run build:win
+          python tools/bluenav/apply_native.py --check
+          python -m unittest discover -s tools/bluenav -p 'test_*.py' -v
+      - name: Report build availability
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 📤 Upload Build Artifacts (.exe)
+          BUILD_RUNNER: ${{ vars.BLUENAV_WINDOWS_RUNNER }}
+        run: |
+          if [ -z "$BUILD_RUNNER" ]; then
+            echo '### Compilation native non demarree' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Configurer BLUENAV_WINDOWS_RUNNER avec le label du runner Windows dedie. Aucun executable Electron ne sera publie.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+  build-windows:
+    needs: validate
+    if: github.event_name != 'pull_request' && vars.BLUENAV_WINDOWS_RUNNER != ''
+    runs-on: ${{ vars.BLUENAV_WINDOWS_RUNNER }}
+    timeout-minutes: 1440
+    env:
+      DEPOT_TOOLS_WIN_TOOLCHAIN: '0'
+      DEPOT_TOOLS_METRICS: '0'
+      GIT_TERMINAL_PROMPT: '0'
+      use_remoteexec: 'false'
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: native/src/brave
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: native/src/brave
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Check Windows build machine
+        run: ./tools/bluenav/check_runner.ps1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.16.0'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned pnpm
+        run: |
+          npm install --global pnpm@11.11.0
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Install Brave dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Synchronize pinned Chromium and apply upstream patches
+        run: |
+          node build/commands/scripts/sync.ts --init --no-history --target_os win --target_arch x64
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Apply BlueNav configuration
+        run: |
+          python tools/bluenav/apply_native.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Compile browser and installer
+        run: ./tools/bluenav/build_windows.ps1
+      - name: Upload native installer and provenance
         uses: actions/upload-artifact@v4
         with:
-          name: BlueNav-Windows-x64
-          path: |
-            bluenav-desktop/dist/*.exe
-            bluenav-desktop/dist/*.blockmap
+          name: BlueNav-native-Windows-x64-${{ github.sha }}
+          path: native/src/brave/artifacts/native/*
+          if-no-files-found: error
           retention-days: 14
-
-      - name: 🏷️ Create GitHub Release (on tag)
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: bluenav-desktop/dist/*.exe
-          name: BlueNav ${{ github.ref_name }}
-          body: |
-            ## 🌐 BlueNav Browser - Release ${{ github.ref_name }}
-            
-            Bienvenue dans la version officielle de **BlueNav**, le navigateur haute performance axé sur la vie privée et l'intelligence artificielle native.
-            
-            ### ✨ Fonctionnalités clés :
-            - 🛡️ **BlueShields Engine** : Blocage avancé des traqueurs et publicités.
-            - 🤖 **BlueAI Copilot** : Assistant IA intégré (Gemini, Claude, GPT, Ollama local).
-            - 🎨 **Design Électrique & Cyber Blue** : Interface ergonomique moderne.
-            - 🚀 **Zéro Télémétrie** : Confidentialité totale dès l'installation.
-          draft: false
-          prerelease: false

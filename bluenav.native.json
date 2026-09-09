@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "appearance": {
+    "verticalTabs": true,
+    "sidebarWidth": 250,
+    "showWindowTitle": false,
+    "hideNewTabWidgets": true,
+    "darkFrame": "#362A30",
+    "darkSurface": "#292327",
+    "darkSelected": "#55424C",
+    "darkText": "#F3ECEF"
+  },
+  "privacy": {
+    "p3a": false,
+    "usagePing": false,
+    "crashUpload": false,
+    "webDiscovery": false
+  },
+  "build": {
+    "minimumFreeDiskGiB": 150,
+    "minimumMemoryGiB": 16,
+    "gnArgs": {
+      "is_component_build": false,
+      "symbol_level": 0,
+      "enable_brave_stats_updater": false,
+      "enable_web_discovery_native": false,
+      "enable_web_discovery": false
+    }
+  }
+}
