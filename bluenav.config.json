@@ -1,46 +1,30 @@
 {
   "browserName": "BlueNav",
   "version": "1.0.0",
-  "codename": "Oceanic",
   "branding": {
-    "primaryColor": "#0070F3",
-    "accentColor": "#00D2FF",
-    "backgroundColorDark": "#0A0E17",
-    "surfaceColorDark": "#131B2E",
-    "textColor": "#FFFFFF",
-    "iconTheme": "neon-blue"
+    "style": "brave-authentic",
+    "primaryColor": "#FB542B",
+    "backgroundColorDark": "#1E2029",
+    "surfaceColorDark": "#14151F",
+    "textColor": "#FFFFFF"
   },
   "features": {
-    "blueShields": {
+    "shields": {
+      "name": "BlueNav Shields",
       "enabled": true,
       "blockAds": true,
       "blockTrackers": true,
-      "blockFingerprinting": true,
-      "upgradeInsecureRequests": true,
-      "cookieIsolation": "strict"
+      "blockFingerprinting": true
     },
-    "blueAI": {
-      "enabled": true,
-      "sidebarCopilot": true,
-      "omniboxQuickAnswers": true,
-      "defaultProvider": "gemini",
-      "availableProviders": [
-        "gemini",
-        "claude",
-        "openai",
-        "ollama_local"
-      ],
-      "localOllamaEndpoint": "http://127.0.0.1:11434"
+    "ai": {
+      "name": "BlueNav AI",
+      "enabled": true
     },
     "newTabPage": {
-      "style": "bluenav-dashboard",
-      "showAiSearchBar": true,
+      "style": "brave-standard",
+      "showClock": true,
       "showShieldStats": true,
-      "showSpeedDials": true
-    },
-    "telemetry": {
-      "disableAllExternalPings": true,
-      "crashReporterSelfHosted": true
+      "showTopSites": true
     }
   },
   "repository": {

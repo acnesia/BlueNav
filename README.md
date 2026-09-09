@@ -1,4 +1,4 @@
-﻿# 🌐 BlueNav Browser
+# 🌐 BlueNav Browser
 
 > **Next-Generation Privacy, Ultra-Speed & Native AI Browser built on top of Brave Core & Chromium.**
 
@@ -15,7 +15,7 @@
 
 - 🛡️ **BlueShields Engine**: Native ad-blocking, fingerprinting protection, tracker blocker, and third-party cookie isolation powered by Rust-based adblock filters.
 - 🤖 **BlueAI Copilot**: Native AI assistant integrated into the sidebar and address bar with multi-provider support (Gemini, Claude, OpenAI, Local LLMs via Ollama).
-- 🎨 **Deep Blue Aesthetic**: A dark mode interface with electric blue and neon cyan accents, custom tab ergonomics, and glassmorphism touches.
+- 🎨 **Brave Authentic Interface**: The clean, high-efficiency, and native Brave Browser design and ergonomics, rebranded under BlueNav.
 - 🚀 **Zero Telemetry**: All external trackers, telemetry, and non-essential telemetry pings removed for pure browsing privacy.
 - ⚡ **Optimized Memory**: Intelligent tab suspending and memory reclamation for smooth multitasking.
 
