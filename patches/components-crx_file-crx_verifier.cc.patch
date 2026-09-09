@@ -1,0 +1,12 @@
+diff --git a/components/crx_file/crx_verifier.cc b/components/crx_file/crx_verifier.cc
+index f2f5de904283ae68dc195cee7bafecec06bec543..afbe3e2a58dc6caa8906fbfef1f697549fb36c15 100644
+--- a/components/crx_file/crx_verifier.cc
++++ b/components/crx_file/crx_verifier.cc
+@@ -211,6 +211,7 @@ VerifierResult VerifyCrx3(
+       found_publisher_key =
+           found_publisher_key || key_hash == kPublisherKeyHash ||
+           (accept_publisher_test_key && key_hash == kPublisherTestKeyHash);
++      found_publisher_key = found_publisher_key || IsBravePublisher(key_hash);
+       std::optional<crypto::keypair::PublicKey> pub_key =
+           crypto::keypair::PublicKey::FromSubjectPublicKeyInfo(
+               base::as_byte_span(key));

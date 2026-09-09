@@ -1,0 +1,13 @@
+diff --git a/tools/crates/gnrt/vendor.rs b/tools/crates/gnrt/vendor.rs
+index 73738391d746bdc747d8ada78c21c67341c9b8cc..2f069f293491e2955b6fa9b189ed6e421dae0cc7 100644
+--- a/tools/crates/gnrt/vendor.rs
++++ b/tools/crates/gnrt/vendor.rs
+@@ -140,7 +140,7 @@ fn download_crates(args: &VendorCommandArgs, paths: &paths::ChromiumPaths) -> Re
+                 format!("Generating placeholder for removed crate {}", crate_dirname.display());
+             println!("{msg}");
+             generate_placeholder_crate(p, &crate_path).context(msg)?;
+-        } else {
++        } else if !p.source().is_local() {
+             let msg = format!("Downloading {}", crate_dirname.display());
+             println!("{msg}");
+             download_crate(p.name(), p.version(), paths).context(msg)?;

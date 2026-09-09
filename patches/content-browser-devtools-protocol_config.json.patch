@@ -1,0 +1,13 @@
+diff --git a/content/browser/devtools/protocol_config.json b/content/browser/devtools/protocol_config.json
+index 8a0121200fc3ce114955fdf8ba69845272593d8b..f8514befed50c71f623179f1f90b65e33b21ad55 100644
+--- a/content/browser/devtools/protocol_config.json
++++ b/content/browser/devtools/protocol_config.json
+@@ -132,7 +132,7 @@
+                   "setCookieControls",
+                   "configureDurableMessages"
+                 ],
+-                "include_events": ["requestWillBeSent", "responseReceived", "loadingFinished", "loadingFailed", "requestIntercepted", "signedExchangeReceived", "requestWillBeSentExtraInfo", "responseReceivedExtraInfo", "responseReceivedEarlyHints", "trustTokenOperationDone", "policyUpdated", "reportingApiReportAdded", "reportingApiReportUpdated", "reportingApiEndpointsChangedForOrigin", "deviceBoundSessionsAdded", "deviceBoundSessionEventOccurred"],
++                "include_events": ["requestAdblockInfoReceived", "requestWillBeSent", "responseReceived", "loadingFinished", "loadingFailed", "requestIntercepted", "signedExchangeReceived", "requestWillBeSentExtraInfo", "responseReceivedExtraInfo", "responseReceivedEarlyHints", "trustTokenOperationDone", "policyUpdated", "reportingApiReportAdded", "reportingApiReportUpdated", "reportingApiEndpointsChangedForOrigin", "deviceBoundSessionsAdded", "deviceBoundSessionEventOccurred"],
+                 "async": [
+                   "configureDurableMessages",
+                   "clearBrowserCookies",

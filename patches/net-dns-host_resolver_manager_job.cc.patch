@@ -1,0 +1,12 @@
+diff --git a/net/dns/host_resolver_manager_job.cc b/net/dns/host_resolver_manager_job.cc
+index 03283ab19bf97d0ef53fb5f2e128ea86276c14b6..ae26faf00d1ee09e316d441fb78e07c61cf57fa1 100644
+--- a/net/dns/host_resolver_manager_job.cc
++++ b/net/dns/host_resolver_manager_job.cc
+@@ -1308,6 +1308,7 @@ void HostResolverManager::Job::CompleteRequests(
+   }
+ 
+   RecordJobHistograms(results, task_type);
++  BRAVE_RECORD_DNS_COUNTS
+   if (results.error() == OK && had_non_speculative_request_ &&
+       key_.source == HostResolverSource::ANY) {
+     RecordJobHttpsHistograms();

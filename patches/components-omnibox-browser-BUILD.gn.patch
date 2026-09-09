@@ -1,0 +1,30 @@
+diff --git a/components/omnibox/browser/BUILD.gn b/components/omnibox/browser/BUILD.gn
+index a73b46aa23e3e184999567789d202d4e5a674ec2..cb23d404335d3b79ff9d56481054c92766efb611 100644
+--- a/components/omnibox/browser/BUILD.gn
++++ b/components/omnibox/browser/BUILD.gn
+@@ -525,6 +525,9 @@ static_library("browser") {
+     ]
+     deps += [ "//content/public/common" ]
+   }
++  sources += brave_components_omnibox_browser_sources
++  public_deps += brave_components_omnibox_browser_public_deps
++  deps += brave_components_omnibox_browser_deps
+ }
+ 
+ source_set("pref_names") {
+@@ -1121,6 +1124,7 @@ fuzzer_test("search_suggestion_parser_fuzzer") {
+ }
+ 
+ mojom("mojo_bindings") {
++  generate_legacy_js_bindings = true
+   sources = [ "omnibox.mojom" ]
+   webui_module_path = "chrome://resources/mojo/components/omnibox/browser"
+ 
+@@ -1142,6 +1146,7 @@ mojom("mojo_bindings") {
+ 
+ if (!is_ios) {
+   mojom("fusebox_action_mojo_bindings") {
++  generate_legacy_js_bindings = true
+     sources = [ "fusebox_action.mojom" ]
+     webui_module_path = "chrome://resources/mojo/components/omnibox/browser"
+     public_deps = [ "//components/omnibox/composebox:mojo_bindings" ]

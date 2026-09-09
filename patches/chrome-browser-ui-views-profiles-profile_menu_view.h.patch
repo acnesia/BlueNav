@@ -1,0 +1,36 @@
+diff --git a/chrome/browser/ui/views/profiles/profile_menu_view.h b/chrome/browser/ui/views/profiles/profile_menu_view.h
+index e37cb3f8817d32982283925772b6b35e4d8c651e..3ebcd443670bb8cd66cfadab1f079b212dbe6c70 100644
+--- a/chrome/browser/ui/views/profiles/profile_menu_view.h
++++ b/chrome/browser/ui/views/profiles/profile_menu_view.h
+@@ -63,6 +63,7 @@ class ProfileMenuView : public ProfileMenuViewBase {
+   }
+ 
+  private:
++  friend class BraveProfileMenuView;
+   friend class ProfileMenuViewExtensionsTest;
+   friend class ProfileMenuViewSigninPendingTest;
+   friend class ProfileMenuViewSignoutTest;
+@@ -81,7 +82,7 @@ class ProfileMenuView : public ProfileMenuViewBase {
+   void OnProfileManagementButtonClicked();
+   void OnManageGoogleAccountButtonClicked();
+   void OnGuestProfileButtonClicked();
+-  void OnExitProfileButtonClicked();
++  virtual void OnExitProfileButtonClicked();
+   void OnSyncSettingsButtonClicked();
+   void OnGoogleServicesSettingsButtonClicked();
+   void OnAccountSettingsButtonClicked();
+@@ -121,12 +122,12 @@ class ProfileMenuView : public ProfileMenuViewBase {
+   void MaybeBuildChromeAccountSettingsButton();
+   void MaybeBuildGoogleServicesSettingsButton();
+   void MaybeBuildManageGoogleAccountButton();
+-  void MaybeBuildCloseBrowsersButton();
++  virtual void MaybeBuildCloseBrowsersButton();
+ #if BUILDFLAG(ENABLE_DICE_SUPPORT)
+   void MaybeBuildCrossDeviceSigninButton();
+ #endif  // BUILDFLAG(ENABLE_DICE_SUPPORT)
+   void MaybeBuildSignoutButton();
+-  void BuildFeatureButtons();
++  virtual void BuildFeatureButtons();
+   IdentitySectionParams GetIdentitySectionParams(
+       const ProfileAttributesEntry& entry);
+   void BuildIdentityWithCallToAction();

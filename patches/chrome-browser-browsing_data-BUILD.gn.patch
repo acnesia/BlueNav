@@ -1,0 +1,12 @@
+diff --git a/chrome/browser/browsing_data/BUILD.gn b/chrome/browser/browsing_data/BUILD.gn
+index 6ea91fba30699b1eb46abb6a3e0853276210294a..ef988081e7d6afc9367abf524bb879006c2df75b 100644
+--- a/chrome/browser/browsing_data/BUILD.gn
++++ b/chrome/browser/browsing_data/BUILD.gn
+@@ -12,6 +12,7 @@ source_set("constants") {
+     "//content/public/browser",
+     "//extensions/buildflags",
+   ]
++  public_deps = [ "//brave/components/ai_chat/core/common/buildflags" ]
+ }
+ 
+ source_set("browsing_data") {

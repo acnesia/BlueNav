@@ -1,0 +1,29 @@
+diff --git a/components/autofill/core/browser/ui/autofill_external_delegate.cc b/components/autofill/core/browser/ui/autofill_external_delegate.cc
+index e8cb74b3fad63ecd2588946ec36bfbe6eaa0e80a..36bfeb85d1af9a53d38d90082fb57e8d0a2c9a5e 100644
+--- a/components/autofill/core/browser/ui/autofill_external_delegate.cc
++++ b/components/autofill/core/browser/ui/autofill_external_delegate.cc
+@@ -510,6 +510,13 @@ void AutofillExternalDelegate::AttemptToDisplayAutofillSuggestions(
+   // updated to match.
+   InsertDataListValues(last_query_.field_datalist_options, suggestions);
+ 
++  if (trigger_field.has_value()) {
++    manager_->client().BraveAddSuggestions(
++        manager_->client().ClassifyAsPasswordForm(
++            *manager_, last_query_.form_id, last_query_.field_id),
++        *trigger_field, suggestions);
++  }
++
+   // TODO(crbug.com/362630793): Try to eliminate this state. The controller
+   // should be the one that knows about what suggestions were shown and passes
+   // it on, not AED.
+@@ -892,6 +899,10 @@ void AutofillExternalDelegate::DidSelectSuggestion(
+ void AutofillExternalDelegate::DidAcceptSuggestion(
+     const Suggestion& suggestion,
+     const SuggestionMetadata& metadata) {
++  if (manager_->client().BraveHandleSuggestion(suggestion,
++                                                last_query_.field_id)) {
++    return;
++  }
+   CHECK(suggestion.IsAcceptable());
+   base::UmaHistogramEnumeration("Autofill.Suggestions.AcceptedType",
+                                 suggestion.type);

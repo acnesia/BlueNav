@@ -1,0 +1,12 @@
+diff --git a/chrome/browser/ui/browser_window/internal/BUILD.gn b/chrome/browser/ui/browser_window/internal/BUILD.gn
+index 03bffe23f1fa5f2937f092facb2254fc222985b1..656240f688065cd3b53ce7c769722b00b0be895f 100644
+--- a/chrome/browser/ui/browser_window/internal/BUILD.gn
++++ b/chrome/browser/ui/browser_window/internal/BUILD.gn
+@@ -201,6 +201,7 @@ source_set("internal") {
+       "//chrome/browser/ui:browser_select_file_dialog_controller",
+     ]
+   }
++  import("//brave/browser/ui/browser_window/internal/sources.gni") deps += brave_browser_window_internal_deps
+ }
+ 
+ source_set("unit_tests") {

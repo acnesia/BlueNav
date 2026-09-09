@@ -1,0 +1,32 @@
+diff --git a/chrome/android/java/src/org/chromium/chrome/browser/media/FullscreenVideoPictureInPictureController.java b/chrome/android/java/src/org/chromium/chrome/browser/media/FullscreenVideoPictureInPictureController.java
+index 7b6c5309d15c802a517306b74278e0e952bebeeb..692f9f53131d8a22d4a18df7880b9d9d2b5b5cb9 100644
+--- a/chrome/android/java/src/org/chromium/chrome/browser/media/FullscreenVideoPictureInPictureController.java
++++ b/chrome/android/java/src/org/chromium/chrome/browser/media/FullscreenVideoPictureInPictureController.java
+@@ -281,6 +281,10 @@ public class FullscreenVideoPictureInPictureController {
+             }
+         }
+ 
++        if (BraveFullscreenVideoPictureInPictureController.class.cast(this)
++                .braveAttemptPictureInPicture(mActivity, webContents, builder, bounds)) {
++            return;
++        }
+         try {
+             if (!mActivity.enterPictureInPictureMode(builder.build())) return;
+         } catch (IllegalStateException | IllegalArgumentException e) {
+@@ -616,6 +620,16 @@ public class FullscreenVideoPictureInPictureController {
+      * This will also update our auto-PiP preference with the framework, if it's changed.
+      */
+     private void dismissActivityIfNeeded(Activity activity, @MetricsEndReason int reason) {
++        if (BraveFullscreenVideoPictureInPictureController.class.cast(this)
++                .maybeHandleDismissActivityForYouTubePictureInPicture(
++                        activity,
++                        reason == MetricsEndReason.START,
++                        reason == MetricsEndReason.RESUME,
++                        reason == MetricsEndReason.LEFT_FULLSCREEN,
++                        reason == MetricsEndReason.WEB_CONTENTS_LEFT_FULLSCREEN,
++                        reason == MetricsEndReason.NEW_TAB)) {
++            return;
++        }
+         // Something interesting happened -- make sure we've updated our preference for auto-PiP
+         // with the framework, if applicable.
+         Log.i(TAG, "Dismiss activity with reason " + reason);
