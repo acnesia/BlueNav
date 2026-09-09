@@ -1,9 +1,40 @@
 const { app, BrowserWindow, session, ipcMain, Menu } = require('electron');
 const path = require('path');
+const https = require('https');
+const { exec } = require('child_process');
+const fs = require('fs');
 
 let mainWindow;
 
-// BlueShields tracker & ad domains list (built-in fast heuristic filter)
+// Settings File Path
+const settingsPath = path.join(app.getPath('userData'), 'bluenav-settings.json');
+
+function loadSettings() {
+  try {
+    if (fs.existsSync(settingsPath)) {
+      return JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+    }
+  } catch (e) {}
+  return {
+    searchEngine: 'google',
+    shieldsEnabled: true,
+    blockTrackers: true,
+    httpsOnly: false
+  };
+}
+
+function saveSettings(data) {
+  try {
+    fs.writeFileSync(settingsPath, JSON.stringify(data, null, 2), 'utf8');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+let userSettings = loadSettings();
+
+// BlueShields tracker & ad domains list
 const TRACKER_DOMAINS = [
   'google-analytics.com',
   'googletagmanager.com',
@@ -36,7 +67,7 @@ const TRACKER_DOMAINS = [
   'smartadserver.com'
 ];
 
-let shieldsEnabled = true;
+let shieldsEnabled = userSettings.shieldsEnabled !== false;
 let totalBlocked = 0;
 let sessionBlocked = 0;
 
@@ -53,7 +84,6 @@ function setupBlueShields() {
   const filter = { urls: ['*://*/*'] };
 
   session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
-    // Check if url matches ad or tracker
     if (isTrackerOrAd(details.url)) {
       totalBlocked++;
       sessionBlocked++;
@@ -70,7 +100,6 @@ function setupBlueShields() {
     }
   });
 
-  // Anti-fingerprinting & header sanitization
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
     if (shieldsEnabled) {
       delete details.requestHeaders['X-Client-Data'];
@@ -85,10 +114,10 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1360,
     height: 860,
-    minWidth: 900,
-    minHeight: 600,
-    backgroundColor: '#0A0E17',
-    title: 'BlueNav Browser',
+    minWidth: 800,
+    minHeight: 500,
+    backgroundColor: '#09090B',
+    title: 'BlueNav',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -105,7 +134,6 @@ function createWindow() {
     mainWindow.show();
   });
 
-  // Remove default menu for clean, modern browser aesthetics
   Menu.setApplicationMenu(null);
 }
 
@@ -124,8 +152,124 @@ ipcMain.handle('shield:toggle', (event, state) => {
   } else {
     shieldsEnabled = !shieldsEnabled;
   }
+  userSettings.shieldsEnabled = shieldsEnabled;
+  saveSettings(userSettings);
   return shieldsEnabled;
 });
+
+// Settings Handlers
+ipcMain.handle('settings:get', () => {
+  return userSettings;
+});
+
+ipcMain.handle('settings:save', (event, newSettings) => {
+  userSettings = { ...userSettings, ...newSettings };
+  shieldsEnabled = userSettings.shieldsEnabled !== false;
+  saveSettings(userSettings);
+  return userSettings;
+});
+
+ipcMain.handle('settings:clear-data', async () => {
+  try {
+    await session.defaultSession.clearStorageData({
+      storages: ['cookies', 'cache', 'localstorage', 'websql', 'indexdb']
+    });
+    return { success: true, message: 'Données effacées avec succès.' };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+});
+
+// 1-Click Update Handlers
+ipcMain.handle('app:check-update', async () => {
+  const currentVersion = '1.0.0';
+  return new Promise((resolve) => {
+    const url = 'https://api.github.com/repos/acnesia/BlueNav/releases/latest?t=' + Date.now();
+    const req = https.get(url, {
+      headers: {
+        'User-Agent': 'BlueNav-Browser',
+        'Cache-Control': 'no-cache'
+      }
+    }, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const json = JSON.parse(data);
+          const latestTag = json.tag_name || '';
+          const latestVersion = latestTag.replace(/^v/, '');
+          const hasUpdate = latestVersion && latestVersion !== currentVersion;
+          
+          let downloadUrl = '';
+          if (json.assets && json.assets.length > 0) {
+            const setupAsset = json.assets.find(a => a.name.endsWith('.exe'));
+            if (setupAsset) downloadUrl = setupAsset.browser_download_url;
+          }
+
+          resolve({
+            success: true,
+            currentVersion,
+            latestVersion: latestVersion || currentVersion,
+            hasUpdate: Boolean(hasUpdate),
+            releaseUrl: json.html_url || 'https://github.com/acnesia/BlueNav/releases',
+            downloadUrl,
+            releaseNotes: json.body || 'Aucune note de version.'
+          });
+        } catch (e) {
+          resolve({
+            success: false,
+            currentVersion,
+            latestVersion: currentVersion,
+            hasUpdate: false,
+            message: 'Impossible de vérifier les mises à jour pour le moment.'
+          });
+        }
+      });
+    });
+
+    req.on('error', (err) => {
+      resolve({
+        success: false,
+        currentVersion,
+        latestVersion: currentVersion,
+        hasUpdate: false,
+        message: err.message
+      });
+    });
+
+    req.setTimeout(8000, () => {
+      req.abort();
+      resolve({
+        success: false,
+        currentVersion,
+        latestVersion: currentVersion,
+        hasUpdate: false,
+        message: 'Délai d attente dépassé.'
+      });
+    });
+  });
+});
+
+// 1-Click Git Pull Update (Direct local source pull)
+ipcMain.handle('app:git-pull-update', () => {
+  return new Promise((resolve) => {
+    const repoRoot = path.join(__dirname, '..');
+    exec('git pull origin main', { cwd: repoRoot }, (error, stdout, stderr) => {
+      if (error) {
+        resolve({
+          success: false,
+          output: stderr || error.message
+        });
+      } else {
+        resolve({
+          success: true,
+          output: stdout || 'BlueNav est déjà à jour.'
+        });
+      }
+    });
+  });
+});
+
 app.whenReady().then(() => {
   setupBlueShields();
   createWindow();

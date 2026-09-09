@@ -3,6 +3,7 @@
 let tabs = [];
 let activeTabId = null;
 let tabCounter = 0;
+let userSettings = { searchEngine: 'google' };
 
 // DOM Elements
 const tabsListEl = document.getElementById("tabs-list");
@@ -21,8 +22,30 @@ const toggleShieldInput = document.getElementById("toggle-shield-input");
 const shieldBadgeCountEl = document.getElementById("shield-badge-count");
 const statSessionBlockedEl = document.getElementById("stat-session-blocked");
 
+// Settings Elements
+const btnSettingsEl = document.getElementById("btn-settings");
+const settingsModalEl = document.getElementById("settings-modal");
+const btnCloseSettingsEl = document.getElementById("btn-close-settings");
+const btnCheckUpdateEl = document.getElementById("btn-check-update");
+const btnGitPullEl = document.getElementById("btn-git-pull");
+const updateStatusMsgEl = document.getElementById("update-status-msg");
+const selectSearchEngineEl = document.getElementById("select-search-engine");
+const btnClearCacheEl = document.getElementById("btn-clear-cache");
+
 // NTP Search Elements
 const ntpSearchInputEl = document.getElementById("ntp-search-input");
+
+// Load settings
+if (window.blueNav) {
+  window.blueNav.getSettings().then(st => {
+    if (st) {
+      userSettings = st;
+      if (selectSearchEngineEl && st.searchEngine) {
+        selectSearchEngineEl.value = st.searchEngine;
+      }
+    }
+  });
+}
 
 // ================= TABS =================
 
@@ -170,6 +193,13 @@ function updateNavigationControls() {
 
 // ================= NAVIGATION =================
 
+function getSearchUrl(query) {
+  const engine = userSettings.searchEngine || 'google';
+  if (engine === 'brave') return `https://search.brave.com/search?q=${encodeURIComponent(query)}`;
+  if (engine === 'duckduckgo') return `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
+  return `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+}
+
 function navigateTo(input) {
   if (!input || !input.trim()) return;
   const raw = input.trim();
@@ -178,7 +208,7 @@ function navigateTo(input) {
   const isUrl = /^https?:\/\//i.test(raw) || (/^([a-z0-9-]+\.)+[a-z]{2,}(:\d+)?(\/.*)?$/i.test(raw) && !raw.includes(" "));
 
   if (!isUrl) {
-    targetUrl = "https://www.google.com/search?q=" + encodeURIComponent(raw);
+    targetUrl = getSearchUrl(raw);
   } else if (!/^https?:\/\//i.test(targetUrl)) {
     targetUrl = "https://" + targetUrl;
   }
@@ -274,6 +304,64 @@ if (window.blueNav) {
     }
   });
 }
+
+// ================= SETTINGS & 1-CLICK UPDATE =================
+
+btnSettingsEl.addEventListener("click", () => {
+  settingsModalEl.classList.remove("hidden");
+});
+
+btnCloseSettingsEl.addEventListener("click", () => {
+  settingsModalEl.classList.add("hidden");
+});
+
+settingsModalEl.addEventListener("click", (e) => {
+  if (e.target === settingsModalEl) {
+    settingsModalEl.classList.add("hidden");
+  }
+});
+
+selectSearchEngineEl.addEventListener("change", async () => {
+  userSettings.searchEngine = selectSearchEngineEl.value;
+  if (window.blueNav) {
+    await window.blueNav.saveSettings(userSettings);
+  }
+});
+
+btnClearCacheEl.addEventListener("click", async () => {
+  if (window.blueNav) {
+    const res = await window.blueNav.clearData();
+    alert(res.message || "Données effacées.");
+  }
+});
+
+btnCheckUpdateEl.addEventListener("click", async () => {
+  updateStatusMsgEl.textContent = "Vérification en cours auprès de GitHub...";
+  if (window.blueNav) {
+    const res = await window.blueNav.checkUpdate();
+    if (res.hasUpdate) {
+      updateStatusMsgEl.innerHTML = `<strong>Nouvelle version dispo : v${res.latestVersion}</strong> (actuelle : v${res.currentVersion}). <a href="${res.releaseUrl}" target="_blank" style="color: #f4f4f5; text-decoration: underline;">Télécharger</a>`;
+    } else if (res.success) {
+      updateStatusMsgEl.textContent = `✓ BlueNav est déjà à jour (v${res.currentVersion}).`;
+    } else {
+      updateStatusMsgEl.textContent = res.message || "Erreur de vérification.";
+    }
+  }
+});
+
+btnGitPullEl.addEventListener("click", async () => {
+  updateStatusMsgEl.textContent = "Mise à jour en direct via Git en cours...";
+  btnGitPullEl.disabled = true;
+  if (window.blueNav) {
+    const res = await window.blueNav.runGitPull();
+    btnGitPullEl.disabled = false;
+    if (res.success) {
+      updateStatusMsgEl.innerHTML = `<strong>✓ Succès :</strong> ${escapeHtml(res.output)}`;
+    } else {
+      updateStatusMsgEl.innerHTML = `<span style="color:#f87171;">Erreur :</span> ${escapeHtml(res.output)}`;
+    }
+  }
+});
 
 // Minimal Clock
 function updateClock() {
