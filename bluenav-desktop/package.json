@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "BlueNav Browser - Privacy-First AI Super-Browser",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/acnesia/BlueNav.git"
+  },
   "scripts": {
     "start": "electron .",
-    "build:win": "electron-builder --win --x64"
+    "build:win": "electron-builder --win --x64 --publish never"
   },
   "keywords": [
     "browser",
@@ -22,6 +26,7 @@
     "electron-builder": "^25.1.8"
   },
   "build": {
+    "publish": null,
     "appId": "com.acnesia.bluenav",
     "productName": "BlueNav",
     "directories": {
