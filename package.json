@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "bluenav": "cd bluenav-desktop && npm start",
     "pnpm:devPreinstall": "node ./build/commands/scripts/devPreinstall.ts",
     "help": "node ./build/commands/scripts/commands.js --help",
     "audit_deps": "node ./build/commands/scripts/audit.js -- --audit_dev_deps",

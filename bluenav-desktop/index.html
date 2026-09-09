@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlueNav</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+  <!-- Top Navigation & Tabs Area -->
+  <header id="browser-chrome">
+    <!-- Tabs Bar -->
+    <div id="tab-strip-container">
+      <div id="tabs-list" class="tabs-list">
+        <!-- Tabs rendered dynamically -->
+      </div>
+      <button id="btn-new-tab" class="chrome-btn" title="Nouvel onglet">+</button>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <div id="navbar">
+      <div class="nav-controls">
+        <button id="btn-back" class="nav-btn" title="Précédent" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <button id="btn-forward" class="nav-btn" title="Suivant" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button id="btn-reload" class="nav-btn" title="Actualiser">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+        <button id="btn-home" class="nav-btn" title="Accueil BlueNav">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </button>
+      </div>
+
+      <!-- Omnibox Address & Search Bar -->
+      <div id="omnibox-wrapper">
+        <div id="omnibox-security-icon" class="omnibox-icon" title="Connexion sécurisée BlueNav">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <input type="text" id="omnibox-input" placeholder="Rechercher ou saisir une adresse URL..." spellcheck="false" autocomplete="off">
+        <div id="omnibox-ai-hint" title="Appuyez sur Entrée pour naviguer ou chercher">
+          <span class="badge-ai">BlueAI</span>
+        </div>
+      </div>
+
+      <!-- Right Action Tools -->
+      <div class="nav-actions">
+        <!-- BlueShields Toggle & Stats Button -->
+        <button id="btn-shield" class="action-btn shield-active" title="BlueShields - Protection active">
+          <div class="shield-icon-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span id="shield-badge-count" class="shield-badge">0</span>
+          </div>
+        </button>
+
+        <!-- BlueAI Copilot Sidebar Toggle -->
+        <button id="btn-toggle-ai" class="action-btn ai-active" title="Ouvrir le copilote BlueAI">
+          <div class="ai-spark-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            <span>BlueAI</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- BlueShields Flyout Dropdown -->
+  <div id="shield-panel" class="dropdown-panel hidden">
+    <div class="shield-panel-header">
+      <div class="shield-panel-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00D2FF" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <h4>BlueShields Protection</h4>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="toggle-shield-input" checked>
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div class="shield-stats-grid">
+      <div class="stat-box">
+        <span id="stat-session-blocked" class="stat-number">0</span>
+        <span class="stat-label">Traqueurs & pubs bloqués</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-number">100%</span>
+        <span class="stat-label">Empreinte protégée</span>
+      </div>
+    </div>
+    <div class="shield-panel-features">
+      <div class="shield-feature-item">
+        <span>🛡️ Anti-Fingerprinting</span>
+        <span class="badge-feature">Actif</span>
+      </div>
+      <div class="shield-feature-item">
+        <span>🚫 Blocage pubs & traqueurs</span>
+        <span class="badge-feature">Strict</span>
+      </div>
+      <div class="shield-feature-item">
+        <span>🔒 Forcer HTTPS & Sécurité GPC</span>
+        <span class="badge-feature">Actif</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workspace: WebViews + New Tab Page + AI Sidebar -->
+  <main id="app-viewport">
+    <!-- Web Content Area -->
+    <div id="web-workspace">
+      <!-- Default BlueNav New Tab Dashboard -->
+      <div id="new-tab-dashboard" class="ntp-view">
+        <div class="ntp-container">
+          <div class="ntp-hero">
+            <div class="ntp-logo-glow">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="url(#blueGrad)" stroke-width="2.2">
+                <defs>
+                  <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#00D2FF" />
+                    <stop offset="100%" stop-color="#0070F3" />
+                  </linearGradient>
+                </defs>
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="url(#blueGrad)" opacity="0.3" />
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+              </svg>
+            </div>
+            <h1 class="ntp-title">Blue<span>Nav</span></h1>
+            <p class="ntp-subtitle">Navigateur ultra-rapide, privé et assisté par l'IA</p>
+          </div>
+
+          <!-- Central Search & AI Query Bar -->
+          <div class="ntp-search-box">
+            <div class="ntp-search-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00D2FF" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <input type="text" id="ntp-search-input" placeholder="Poser une question à BlueAI ou naviguer sur le web..." autocomplete="off">
+            <button id="btn-ntp-search" class="ntp-search-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+
+          <!-- Privacy Shield Banner -->
+          <div class="ntp-shield-banner">
+            <div class="shield-stat-card">
+              <span id="ntp-shield-total" class="stat-val">2 841</span>
+              <span class="stat-desc">Pubs & traqueurs bloqués</span>
+            </div>
+            <div class="shield-stat-card">
+              <span class="stat-val">68 Mo</span>
+              <span class="stat-desc">Bande passante économisée</span>
+            </div>
+            <div class="shield-stat-card">
+              <span class="stat-val">3.4 s</span>
+              <span class="stat-desc">Temps de chargement gagné</span>
+            </div>
+          </div>
+
+          <!-- Quick Access Speed Dials -->
+          <div class="speed-dials">
+            <a class="speed-dial-item" href="#" data-url="https://github.com/acnesia/BlueNav">
+              <div class="dial-icon github-icon">🐙</div>
+              <span class="dial-title">BlueNav GitHub</span>
+            </a>
+            <a class="speed-dial-item" href="#" data-url="https://google.com">
+              <div class="dial-icon google-icon">🔍</div>
+              <span class="dial-title">Google</span>
+            </a>
+            <a class="speed-dial-item" href="#" data-url="https://youtube.com">
+              <div class="dial-icon youtube-icon">▶️</div>
+              <span class="dial-title">YouTube</span>
+            </a>
+            <a class="speed-dial-item" href="#" data-url="https://reddit.com">
+              <div class="dial-icon reddit-icon">🤖</div>
+              <span class="dial-title">Reddit</span>
+            </a>
+            <a class="speed-dial-item" href="#" data-url="https://wikipedia.org">
+              <div class="dial-icon wiki-icon">📚</div>
+              <span class="dial-title">Wikipédia</span>
+            </a>
+            <a class="speed-dial-item" href="#" data-url="https://chatgpt.com">
+              <div class="dial-icon ai-icon">🧠</div>
+              <span class="dial-title">ChatGPT</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- WebViews Container (for actual website tabs) -->
+      <div id="webview-host"></div>
+    </div>
+
+    <!-- BlueAI Sidebar Copilot -->
+    <aside id="ai-sidebar" class="ai-sidebar">
+      <div class="ai-sidebar-header">
+        <div class="ai-header-title">
+          <div class="ai-badge-indicator"></div>
+          <h3>BlueAI Copilot</h3>
+        </div>
+        <div class="ai-header-controls">
+          <select id="ai-model-select">
+            <option value="BlueAI Pro (Gemini 2.5)">Gemini 2.5 Flash</option>
+            <option value="Claude 3.5 Sonnet">Claude 3.5</option>
+            <option value="GPT-4o Turbo">GPT-4o Turbo</option>
+            <option value="Ollama Local (Llama 3.3)">Ollama Local</option>
+          </select>
+          <button id="btn-close-ai" class="ai-icon-btn" title="Fermer la barre latérale">✕</button>
+        </div>
+      </div>
+
+      <!-- Quick Action Chips -->
+      <div class="ai-quick-actions">
+        <button class="ai-chip" data-prompt="Résume cette page en 3 points clés">📝 Résumer la page</button>
+        <button class="ai-chip" data-prompt="Vérifie la sécurité et les traqueurs de ce site">🛡️ Audit sécurité</button>
+        <button class="ai-chip" data-prompt="Quelles sont les informations clés de ce site ?">⚡ Points essentiels</button>
+      </div>
+
+      <!-- Chat History -->
+      <div id="ai-chat-container" class="ai-chat-messages">
+        <div class="ai-message assistant-message">
+          <div class="ai-bubble">
+            <strong>Bonjour ! Je suis BlueAI.</strong>
+            <p>Je suis directement connecté à votre navigation. Posez-moi une question, demandez-moi de résumer un article ou analysez la page active.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="ai-input-wrapper">
+        <textarea id="ai-input-text" placeholder="Demandez n'importe quoi à BlueAI..." rows="2"></textarea>
+        <button id="btn-send-ai" class="ai-send-btn" title="Envoyer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </aside>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
