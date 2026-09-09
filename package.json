@@ -1,7 +1,7 @@
 {
-  "name": "brave-core",
-  "version": "1.97.17",
-  "description": "Brave browser for Android, iOS, Linux, macOS, and Windows",
+  "name": "bluenav-core",
+  "version": "1.0.0",
+  "description": "BlueNav Browser - Next-Generation Privacy-First AI Browser based on Brave Core & Chromium",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -53,14 +53,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brave/brave-core.git"
+    "url": "git+https://github.com/acnesia/BlueNav.git"
   },
   "author": {
-    "name": "Brave Software <support@brave.com>"
+    "name": "acnesia <https://github.com/acnesia>"
   },
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/brave/brave-browser/issues"
+    "url": "https://github.com/acnesia/BlueNav/issues"
   },
   "devEngines": {
     "runtime": {

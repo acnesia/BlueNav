@@ -1,0 +1,49 @@
+﻿{
+  "browserName": "BlueNav",
+  "version": "1.0.0",
+  "codename": "Oceanic",
+  "branding": {
+    "primaryColor": "#0070F3",
+    "accentColor": "#00D2FF",
+    "backgroundColorDark": "#0A0E17",
+    "surfaceColorDark": "#131B2E",
+    "textColor": "#FFFFFF",
+    "iconTheme": "neon-blue"
+  },
+  "features": {
+    "blueShields": {
+      "enabled": true,
+      "blockAds": true,
+      "blockTrackers": true,
+      "blockFingerprinting": true,
+      "upgradeInsecureRequests": true,
+      "cookieIsolation": "strict"
+    },
+    "blueAI": {
+      "enabled": true,
+      "sidebarCopilot": true,
+      "omniboxQuickAnswers": true,
+      "defaultProvider": "gemini",
+      "availableProviders": [
+        "gemini",
+        "claude",
+        "openai",
+        "ollama_local"
+      ],
+      "localOllamaEndpoint": "http://127.0.0.1:11434"
+    },
+    "newTabPage": {
+      "style": "bluenav-dashboard",
+      "showAiSearchBar": true,
+      "showShieldStats": true,
+      "showSpeedDials": true
+    },
+    "telemetry": {
+      "disableAllExternalPings": true,
+      "crashReporterSelfHosted": true
+    }
+  },
+  "repository": {
+    "github": "https://github.com/acnesia/BlueNav"
+  }
+}

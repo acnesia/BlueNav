@@ -1,258 +1,90 @@
-![Brave Browser](./docs/images/brave.svg)
+﻿# 🌐 BlueNav Browser
 
-# Brave Core
+> **Next-Generation Privacy, Ultra-Speed & Native AI Browser built on top of Brave Core & Chromium.**
 
-Brave Core is a set of changes, APIs, and scripts used for customizing Chromium
-to make the Brave browser. Please also check
-https://github.com/brave/brave-browser which only holds the issues, releases and
-the wiki.
+[![GitHub Repo](https://img.shields.io/badge/GitHub-acnesia%2FBlueNav-0070f3?logo=github)](https://github.com/acnesia/BlueNav)
+[![Engine](https://img.shields.io/badge/Engine-Brave%20Core%20%2B%20Chromium-00d2ff)](#)
+[![License](https://img.shields.io/badge/License-MPL%202.0-blue.svg)](#)
+[![Status](https://img.shields.io/badge/Status-Active%20Development-success)](#)
 
-## Overview
+---
 
-This repository holds the build tools needed to build the Brave desktop browser
-for all platforms. In particular, it fetches and syncs code from the projects
-defined in `package.json` and `src/brave/DEPS`:
+## ⚡ What is BlueNav?
 
-- [Chromium](https://chromium.googlesource.com/chromium/src.git)
-  - Fetches code via `depot_tools`.
-  - Sets the branch for Chromium (ex: 65.0.3325.181).
-- [brave-core](https://github.com/brave/brave-core)
-  - Mounted at `src/brave`.
-  - Maintains patches for 3rd party Chromium code.
-- [adblock-rust](https://github.com/brave/adblock-rust)
-  - Implements Brave's adblock engine.
-  - Linked through
-    [brave/adblock-rust-ffi](https://github.com/brave/brave-core/tree/master/components/adblock_rust_ffi).
+**BlueNav** is a customized, privacy-respecting, high-performance web browser. Combining the speed and compatibility of **Chromium** with the advanced tracker/ad-blocking shields of **Brave Core**, BlueNav elevates the browsing experience with:
 
-## Resources
+- 🛡️ **BlueShields Engine**: Native ad-blocking, fingerprinting protection, tracker blocker, and third-party cookie isolation powered by Rust-based adblock filters.
+- 🤖 **BlueAI Copilot**: Native AI assistant integrated into the sidebar and address bar with multi-provider support (Gemini, Claude, OpenAI, Local LLMs via Ollama).
+- 🎨 **Deep Blue Aesthetic**: A dark mode interface with electric blue and neon cyan accents, custom tab ergonomics, and glassmorphism touches.
+- 🚀 **Zero Telemetry**: All external trackers, telemetry, and non-essential telemetry pings removed for pure browsing privacy.
+- ⚡ **Optimized Memory**: Intelligent tab suspending and memory reclamation for smooth multitasking.
 
-- [Documentation and guides](https://github.com/brave/brave-core/blob/master/docs/README.md)
-- [Issues](https://github.com/brave/brave-browser/issues)
-- [Releases](https://github.com/brave/brave-browser/releases)
-- [Wiki](https://github.com/brave/brave-browser/wiki)
+---
 
-## Downloads
+## 📁 Repository Structure
 
-You can [visit our website](https://brave.com/download) to get the latest stable
-release.
+This repository contains the full browser core:
 
-## Contributing
+```text
+c:/navigateur IA/ (BlueNav)
+├── app/                  # Application initialization, branding, icon assets, strings
+├── browser/              # UI layer, tab management, omnibox, extensions, profiles
+├── build/                # Build configs, branding scripts, GN toolchain arguments
+├── components/           # Core subsystems:
+│   ├── ai_chat/          # BlueAI / Leo AI copilot integration & workspace
+│   ├── brave_shields/    # Privacy shields, adblocker filters & cookie guards
+│   ├── brave_new_tab_ui/ # Modern customizable New Tab Page
+│   ├── brave_wallet_ui/  # Web3 and crypto wallet integration
+│   ├── omnibox/          # Intelligent search and URL suggestions
+│   └── sidebar/          # Quick-access tools, AI dock & productivity panel
+├── patches/              # Patches applied onto upstream Chromium
+└── resources/            # Vector icons, localizations, themes & assets
+```
 
-Please see the [contributing guidelines](./CONTRIBUTING.md).
+---
 
-Our [Wiki](https://github.com/brave/brave-browser/wiki) also has some useful
-technical information, especially about setting the development environment.
+## 🛠️ Quick Start & Development
 
-## Security Policy
+### Prerequisites
+- **Git** 2.41+
+- **Node.js** 20+
+- **pnpm** 9+ / 10+
+- **Python** 3.10+
 
-Please see the [security policy](./SECURITY.md).
-
-## Community
-
-[Join the Q&A community](https://community.brave.app/) if you'd like to get more
-involved with Brave. You can
-[ask for help](https://community.brave.app/c/support-and-troubleshooting),
-[discuss features you'd like to see](https://community.brave.app/c/brave-feature-requests),
-and a lot more. We'd love to have your help so that we can continue improving
-Brave.
-
-You can also ask questions and interact in the
-[`community-guest`](https://bravesoftware.slack.com) channel on Brave Software's
-Slack.
-
-Help us translate Brave to your language by submitting translations at
-https://explore.transifex.com/brave/brave_en/.
-
-Follow [@brave](https://x.com/brave) on X for important news and announcements.
-
-## Install prerequisites
-
-Follow the instructions for your platform:
-
-- [Android](https://github.com/brave/brave-browser/wiki/Android-Development-Environment)
-- [Linux](https://github.com/brave/brave-browser/wiki/Linux-Development-Environment)
-- [iOS](https://github.com/brave/brave-browser/wiki/iOS-Development-Environment)
-- [macOS](https://github.com/brave/brave-browser/wiki/macOS-Development-Environment)
-- [Windows](https://github.com/brave/brave-browser/wiki/Windows-Development-Environment)
-
-## Clone and initialize
-
-Once you have the prerequisites installed, you can get the code and initialize
-the build environment.
-
-**Clone the repo.** `brave-core` must be checked out into `./src/brave` within a
-pre-existing project folder:
-
+### Cloning the Project
 ```bash
-git clone git@github.com:brave/brave-core.git path-to-your-project-folder/src/brave
-cd path-to-your-project-folder/src/brave
+git clone https://github.com/acnesia/BlueNav.git
+cd BlueNav
 ```
 
-**Initialize the build environment.** This step will download the Chromium
-source, which has a large history (10's of gigabytes of data). This might take a
-really long time to finish depending on internet speed.
-
+### Initializing Dependencies
 ```bash
-# Most builds:
-pnpm run init
-
-# Android builds (replace `arm` with whichever CPU type you want to build for):
-pnpm run init --target_os=android --target_arch=arm
-
-# iOS builds:
-pnpm run init --target_os=ios
+pnpm install
 ```
 
-Additional config needed to build are documented at
-https://github.com/brave/brave-browser/wiki/Build-configuration
+---
 
-Internal developers can find more information at
-https://github.com/brave/internal/wiki/Build-configuration
+## 🗺️ Customization Roadmap ("Modifier au Max")
 
-## Build Brave
+1. **Brand Transformation**:
+   - [x] Renamed core packages to BlueNav
+   - [x] Initialized public GitHub repository (`acnesia/BlueNav`)
+   - [ ] Replace Lion assets and orange palettes with Electric Blue & Cyan
+   - [ ] Custom BlueNav application icons and vector branding
 
-The default build type is component.
+2. **Interface & Ergonomics**:
+   - [ ] Redesigned New Tab Page (NTP) with BlueNav widgets & AI search prompt
+   - [ ] Sidebar AI Copilot with quick summaries, translation, and page distillation
+   - [ ] Floating address bar (Omnibox) with instant AI answers
 
-```
-# start the component build compile
-pnpm run build
-```
+3. **Privacy & Shields**:
+   - [ ] Stricter anti-fingerprinting rules
+   - [ ] Anti-phishing heuristics
+   - [ ] Auto-clean cache and cookies on exit per profile
 
-To do a release build:
+---
 
-```
-# start the release compile
-pnpm run build Release
-```
+## 📜 License
 
-brave-core based android builds should use
-`pnpm run build --target_os=android --target_arch=arm`
-
-brave-core based iOS builds should use the Xcode project found in
-`ios/brave-ios/App`. You can open this project directly or run
-`pnpm run ios_bootstrap --open_xcodeproj` to have it opened in Xcode. See the
-[iOS Developer Environment](https://github.com/brave/brave-browser/wiki/iOS-Development-Environment#Building)
-for more information on iOS builds.
-
-### Build Configurations
-
-Running a release build with `pnpm run build Release` can be very slow and use a
-lot of RAM, especially on Linux with the Gold LLVM plugin.
-
-To run a statically linked build (takes longer to build, but starts faster):
-
-```bash
-pnpm run build Static
-```
-
-To run a debug build (Component build with is_debug=true):
-
-```bash
-pnpm run build Debug
-```
-
-NOTE: the build will take a while to complete. Depending on your processor and
-memory, it could potentially take a few hours.
-
-## Run Brave
-
-To start the build:
-
-`pnpm start [Release|Component|Static|Debug]`
-
-## Update Brave
-
-`pnpm run sync [--force] [--init] [--create] [brave_core_ref]`
-
-**This will attempt to stash your local changes in brave-core, but it's safer to
-commit local changes before running this**
-
-`pnpm run sync` will (depending on the below flags):
-
-1. 📥 Update sub-projects (chromium, brave-core) to latest commit of a git ref
-   (e.g. tag or branch)
-2. 🤕 Apply patches
-3. 🔄 Update gclient DEPS dependencies
-4. ⏩ Run hooks
-
-| flag                           | Description                                                                                                                                                                                                                                                                                                                                                                |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `[no flags]`                   | updates chromium if needed and re-applies patches. If the chromium version did not change, it will only re-apply patches that have changed. Will update child dependencies **only if any project needed updating during this script run**. <br> **Use this if you want the script to manage keeping you up to date instead of pulling or switching branches manually. **   |
-| `--force`                      | updates both _Chromium_ and _brave-core_ to the latest remote commit for the current brave-core branch and the _Chromium_ ref specified in brave-core/package.json (e.g. `master` or `74.0.0.103`). Will re-apply all patches. Will force update all child dependencies. <br> **Use this if you're having trouble and want to force the branches back to a known state. ** |
-| `--init`                       | force update both _Chromium_ and _brave-core_ to the versions specified in brave-core/package.json and force updates all dependent repos - same as `pnpm run init`                                                                                                                                                                                                         |
-| `--sync_chromium (true/false)` | Will force or skip the chromium version update when applicable. Useful if you want to avoid a minor update when not ready for the larger build time a chromium update may result in. A warning will be output about the current code state expecting a different chromium version. Your build may fail as a result.                                                        |
-| `-D, --delete_unused_deps`     | Will delete from the working copy any dependencies that have been removed since the last sync. Mimics `gclient sync -D`.                                                                                                                                                                                                                                                   |
-
-Run `pnpm run sync brave_core_ref` to checkout the specified _brave-core_ ref
-and update all dependent repos including chromium if needed.
-
-## Scenarios
-
-#### Create a new branch:
-
-```bash
-> cd src/brave
-src/brave> git checkout -b branch_name
-```
-
-#### Checkout an existing branch or tag:
-
-```bash
-src/brave> git fetch origin
-src/brave> git checkout [-b] branch_name
-src/brave> pnpm run sync
-...Updating 2 patches...
-...Updating child dependencies...
-...Running hooks...
-```
-
-#### Update the current branch to the latest remote:
-
-```bash
-src/brave> git pull
-src/brave> pnpm run sync
-...Updating 2 patches...
-...Updating child dependencies...
-...Running hooks...
-```
-
-#### Reset to latest brave-core master (via `init`, will always result in a longer build and will remove any pending changes in your brave-core working directory):
-
-```bash
-src/brave> git checkout master
-src/brave> git pull
-src/brave> pnpm run sync --init
-```
-
-#### When you know that DEPS didn't change, but .patch files did (quickest attempt to perform a mini-sync before a build):
-
-```bash
-src/brave> git checkout featureB
-src/brave> git pull
-src/brave> pnpm run apply_patches
-...Applying 2 patches...
-```
-
-## Enabling third-party APIs
-
-1. **Google Safe Browsing**: Get an API key with SafeBrowsing API enabled from
-   https://console.developers.google.com/. Update the `GOOGLE_API_KEY`
-   environment variable with your key as per
-   https://www.chromium.org/developers/how-tos/api-keys to enable Google
-   SafeBrowsing.
-
-## Development
-
-- [Security rules from Chromium](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/docs/security/rules.md)
-- [IPC review guidelines](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/ipc-reviews.md)
-  (in particular
-  [this reference](https://docs.google.com/document/d/1Kw4aTuISF7csHnjOpDJGc7JYIjlvOAKRprCTBVWw_E4/edit#heading=h.84bpc1e9z1bg))
-- [Brave's internal security guidelines](https://github.com/brave/internal/wiki/Pull-request-security-audit-checklist)
-  (for employees only)
-- [Rust usage](https://github.com/brave/brave-core/blob/master/docs/rust.md)
-
-## Troubleshooting
-
-See
-[Troubleshooting](https://github.com/brave/brave-browser/wiki/Troubleshooting)
-for solutions to common problems.
+BlueNav is distributed under the **Mozilla Public License 2.0 (MPL-2.0)**.
+Derived from the open-source Brave Core project and Chromium.
