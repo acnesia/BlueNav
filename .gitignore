@@ -122,3 +122,5 @@ agents/testing/.last_run/
 agents/**/__pycache__/
 
 /.ignore/
+
+dist-release/
